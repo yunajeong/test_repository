@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Ncloud TTS</title>
+    <link rel="stylesheet" href="static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>텍스트를 음성으로 변환</h1>
+        <input type="text" id="textInput" placeholder="텍스트를 입력하세요">
+
+        <select id="speakerSelect">
+            <option value="nara">Nara (여성)</option>
+            <option value="jinho">Jinho (남성)</option>
+            <option value="clara">Clara (여성)</option>
+            <option value="mijin">Mijin (여성)</option>
+            <option value="nhajun">nhajun (남성)</option>
+        </select>
+
+        <button id="ttsButton">음성 출력</button>
+
+        <audio id="ttsAudio" controls></audio>
+    </div>
+
+    <script>
+        const button = document.getElementById("ttsButton");
+        const input = document.getElementById("textInput");
+        const speakerSelect = document.getElementById("speakerSelect");
+        const audio = document.getElementById("ttsAudio");
+
+        button.addEventListener("click", async () => {
+            const text = input.value.trim();
+            const speaker = speakerSelect.value;
+
+            if (!text) {
+                alert("텍스트를 입력해주세요!");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("text", text);
+            formData.append("speaker", speaker);
+
+            try {
+                const response = await fetch("/speak", {
+                    method: "POST",
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const blob = await response.blob();
+                    audio.src = URL.createObjectURL(blob);
+                    audio.play();
+                } else {
+                    const errorText = await response.text();
+                    alert("오류 발생: " + errorText);
+                }
+            } catch (err) {
+                alert("서버 요청 실패: " + err);
+            }
+        });
+    </script>
+</body>
+</html>
