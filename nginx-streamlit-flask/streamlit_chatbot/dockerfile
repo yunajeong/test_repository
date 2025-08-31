@@ -1,0 +1,17 @@
+FROM python:3.10-slim
+
+#작업 디렉터토리
+WORKDIR /app
+
+#필요 라이브러리 설치
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+#소스 코드 복사
+COPY . .
+
+#streamlit 포트 노출
+EXPOSE 8501
+
+#streamlit 앱 실행
+CMD ["streamlit", "run", "main.py", "--server.port=8501", "--server.address=0.0.0.0"]

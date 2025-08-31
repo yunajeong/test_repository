@@ -1,0 +1,6 @@
+streamlit
+# 추가로 API 호출 등 필요한 라이브러리 예시
+requests
+
+# 세션 관리, chat_message 등
+# 아래는 chat_utils, chat_completions, router, skillset은 로컬 모듈이므로 따로 설치 불필요
